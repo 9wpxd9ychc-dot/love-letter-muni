@@ -15,10 +15,10 @@ body{font-family:Manrope,system-ui,sans-serif}
 .grain{position:fixed;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
 .ui{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(22px,4vh,44px) 20px max(22px,env(safe-area-inset-bottom));pointer-events:none}
 .brand{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#d8a6ad;opacity:.9}
-.content{width:min(100%,540px);text-align:center;pointer-events:auto;transition:opacity .7s,transform .7s}
+.content{width:min(100%,540px);text-align:center;pointer-events:auto;transition:opacity .7s,transform .7s;text-shadow:0 2px 22px rgba(0,0,0,.45)}
 .eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#d99aa8;margin-bottom:12px}
 h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(42px,8vw,72px);font-weight:500;line-height:.92;letter-spacing:-.035em;margin:0;color:#fff0e7;text-shadow:0 4px 35px #0008}
-.copy{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(18px,3.5vw,23px);line-height:1.35;color:#ead2cf;max-width:460px;margin:16px auto 22px}
+.copy{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(18px,3.5vw,23px);line-height:1.38;color:#f4e2df;max-width:460px;margin:16px auto 22px;text-shadow:0 2px 16px #12080d}
 .actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 button{border:1px solid rgba(246,214,208,.34);border-radius:999px;padding:14px 23px;background:rgba(110,27,54,.88);color:#fff5ed;font:600 10px Manrope,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:transform .25s,background .25s,border-color .25s;backdrop-filter:blur(10px)}
 button:hover{transform:translateY(-2px);background:#96314e;border-color:#e5b5bc}button:focus-visible{outline:2px solid #f8d8d7;outline-offset:4px}
@@ -30,7 +30,7 @@ button.secondary{background:rgba(30,15,22,.45)}
 #loading{position:fixed;inset:0;display:grid;place-items:center;background:#180e14;color:#e8c6c4;font:11px Manrope,sans-serif;letter-spacing:.22em;text-transform:uppercase;z-index:5;transition:opacity .5s}
 #loading.done{opacity:0;pointer-events:none}
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@media(max-width:600px){.ui{padding-top:20px}.content{margin-bottom:2vh}.copy{max-width:340px;margin:13px auto 18px}button{padding:13px 19px}.hint{font-size:9px}}
+@media(max-width:600px){.ui{justify-content:flex-start;padding:22px 20px max(24px,env(safe-area-inset-bottom))}.brand{font-size:9px;letter-spacing:.25em}.content{margin-top:clamp(74px,12vh,112px);width:min(100%,390px)}h1{font-size:clamp(39px,10vw,54px);line-height:.98}.eyebrow{font-size:9px;margin-bottom:10px}.copy{max-width:340px;font-size:clamp(18px,4.7vw,21px);line-height:1.34;margin:14px auto 18px}button{padding:13px 19px}.hint{font-size:8px;margin-top:auto;padding-bottom:2px;letter-spacing:.1em}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -63,7 +63,7 @@ const scene=new THREE.Scene();scene.background=new THREE.Color('#180e14');scene.
 const camera=new THREE.PerspectiveCamera(34,innerWidth/innerHeight,.1,80);
 camera.position.set(0,5.9,9.4);camera.lookAt(0,.45,0);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
 scene.add(new THREE.HemisphereLight('#f7dce0','#28131d',2.0));
 const key=new THREE.DirectionalLight('#ffe4d4',3.1);key.position.set(-3,8,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);scene.add(key);
 const fill=new THREE.PointLight('#d85c7b',28,14);fill.position.set(3,3,2);scene.add(fill);
@@ -91,7 +91,7 @@ function makeRose(x,z,scale=1){
  const center=new THREE.Mesh(new THREE.SphereGeometry(.105,18,14),mat('#e6a05f',.38));center.position.y=.62;g.add(center);
  return g;
 }
-const roses=[makeRose(-1.55,-.62,.86),makeRose(1.58,.78,.8),makeRose(-1.25,1.0,.62)];
+const roses=[makeRose(-1.55,-.62,.68),makeRose(1.58,.78,.64)];
 const coverPivot=new THREE.Group();coverPivot.position.set(-2.28,.31,0);card.add(coverPivot);
 const cover=new THREE.Mesh(new THREE.BoxGeometry(4.55,.16,3.2),mat('#68182f',.42,.04));cover.position.x=2.275;cover.castShadow=true;cover.receiveShadow=true;coverPivot.add(cover);
 const coverFace=new THREE.Mesh(new THREE.PlaneGeometry(3.7,2.45),new THREE.MeshStandardMaterial({map:textTexture(['Muni','с любовью ♡'],{color:'#f7d7d0'}),transparent:true,roughness:.6,side:THREE.DoubleSide}));coverFace.rotation.x=-Math.PI/2;coverFace.position.set(2.275,.085,0);coverPivot.add(coverFace);
@@ -105,7 +105,7 @@ function setOpen(value){opened=value;targetOpen=value?1:0;document.querySelector
 document.querySelector('#open').addEventListener('click',()=>setOpen(true));
 document.querySelector('#again').addEventListener('click',()=>setOpen(false));
 addEventListener('pointermove',e=>{pointerX=(e.clientX/innerWidth-.5);pointerY=(e.clientY/innerHeight-.5);},{passive:true});
-function resize(){camera.aspect=innerWidth/innerHeight;camera.position.z=innerWidth<600?11.8:9.4;camera.position.y=innerWidth<600?6.7:5.9;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
+function resize(){const mobile=innerWidth<600;camera.aspect=innerWidth/innerHeight;camera.position.z=mobile?12.8:9.4;camera.position.y=mobile?7.2:5.9;camera.lookAt(0,mobile?-.25:.45,0);card.position.y=mobile?-1.05:0;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));}
 addEventListener('resize',resize);
 const clock=new THREE.Clock();
 function render(){const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;opening+=(targetOpen-opening)*(1-Math.exp(-dt*2.4));coverPivot.rotation.z=opening*1.42;
