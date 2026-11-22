@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#180e14"><meta name="description" content="Маленькая интерактивная 3D-открытка, созданная специально для Muni.">
+<title>Для Muni — LOVE LETTER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--cream:#f7e9dd;--rose:#d98a9c;--wine:#681c35}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#180e14;color:var(--cream)}
+body{font-family:Manrope,system-ui,sans-serif}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 44%,transparent 20%,rgba(13,6,10,.2) 72%,rgba(13,6,10,.72) 100%)}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
+.ui{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(22px,4vh,44px) 20px max(22px,env(safe-area-inset-bottom));pointer-events:none}
+.brand{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#d8a6ad;opacity:.9}
+.content{width:min(100%,540px);text-align:center;pointer-events:auto;transition:opacity .7s,transform .7s}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#d99aa8;margin-bottom:12px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(42px,8vw,72px);font-weight:500;line-height:.92;letter-spacing:-.035em;margin:0;color:#fff0e7;text-shadow:0 4px 35px #0008}
+.copy{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(18px,3.5vw,23px);line-height:1.35;color:#ead2cf;max-width:460px;margin:16px auto 22px}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+button{border:1px solid rgba(246,214,208,.34);border-radius:999px;padding:14px 23px;background:rgba(110,27,54,.88);color:#fff5ed;font:600 10px Manrope,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:transform .25s,background .25s,border-color .25s;backdrop-filter:blur(10px)}
+button:hover{transform:translateY(-2px);background:#96314e;border-color:#e5b5bc}button:focus-visible{outline:2px solid #f8d8d7;outline-offset:4px}
+button.secondary{background:rgba(30,15,22,.45)}
+#letter{display:none}#letter.visible{display:block;animation:rise .9s cubic-bezier(.2,.75,.2,1) both}
+#intro.hidden{display:none}
+.signature{margin-top:17px;font:10px Manrope,sans-serif;letter-spacing:.18em;color:#c78d9a;text-transform:uppercase}
+.hint{font:10px Manrope,sans-serif;letter-spacing:.12em;color:#b98e96;opacity:.75;text-align:center}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:#180e14;color:#e8c6c4;font:11px Manrope,sans-serif;letter-spacing:.22em;text-transform:uppercase;z-index:5;transition:opacity .5s}
+#loading.done{opacity:0;pointer-events:none}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(max-width:600px){.ui{padding-top:20px}.content{margin-bottom:2vh}.copy{max-width:340px;margin:13px auto 18px}button{padding:13px 19px}.hint{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="loading">С любовью для Muni</div>
+<canvas id="scene" aria-label="Интерактивная трёхмерная любовная открытка"></canvas><div class="vignette"></div><div class="grain"></div>
+<main class="ui">
+  <div class="brand">LOVE LETTER · MADE WITH CARE</div>
+  <section class="content" id="intro">
+    <div class="eyebrow">a little something for you</div>
+    <h1>Для Muni <span style="color:#d88b9a">♡</span></h1>
+    <p class="copy">Я собрал для тебя маленький бумажный мир. Нажми, чтобы открыть его.</p>
+    <div class="actions"><button id="open">Открыть открытку</button></div>
+    <div class="signature">сделано специально для тебя</div>
+  </section>
+  <section class="content" id="letter">
+    <div class="eyebrow">только для тебя</div>
+    <h1>Muni, ты особенная</h1>
+    <p class="copy">Пусть даже самый обычный день становится немного светлее от твоей улыбки. Спасибо за тепло, которое ты приносишь в этот мир. Эта маленькая открытка — напоминание о том, что ты очень дорога. <span style="color:#e28a9d">♥</span></p>
+    <div class="actions"><button class="secondary" id="again">Закрыть открытку</button></div>
+    <div class="signature">с теплом и любовью ♡</div>
+  </section>
+  <div class="hint">МОЖНО ПОВЕРНУТЬ ОТКРЫТКУ ДВИЖЕНИЕМ МЫШИ</div>
+</main>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+
+const canvas=document.querySelector('#scene');
+const scene=new THREE.Scene();scene.background=new THREE.Color('#180e14');scene.fog=new THREE.Fog('#180e14',11,23);
+const camera=new THREE.PerspectiveCamera(34,innerWidth/innerHeight,.1,80);
+camera.position.set(0,5.9,9.4);camera.lookAt(0,.45,0);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+scene.add(new THREE.HemisphereLight('#f7dce0','#28131d',2.0));
+const key=new THREE.DirectionalLight('#ffe4d4',3.1);key.position.set(-3,8,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);scene.add(key);
+const fill=new THREE.PointLight('#d85c7b',28,14);fill.position.set(3,3,2);scene.add(fill);
+const floor=new THREE.Mesh(new THREE.CircleGeometry(12,80),new THREE.MeshStandardMaterial({color:'#24131c',roughness:.86}));floor.rotation.x=-Math.PI/2;floor.position.y=-.12;floor.receiveShadow=true;scene.add(floor);
+const card=new THREE.Group();scene.add(card);
+const mat=(color,roughness=.72,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
+const base=new THREE.Mesh(new THREE.BoxGeometry(4.65,.22,3.25),mat('#4a1427'));base.position.y=.02;base.castShadow=true;base.receiveShadow=true;card.add(base);
+const pageMat=mat('#f0dfca',.94),edgeMat=mat('#d9c3ac');
+for(const side of [-1,1]){
+ const page=new THREE.Mesh(new THREE.BoxGeometry(2.22,.12,3.05),pageMat);page.position.set(side*1.12,.2,0);page.castShadow=true;page.receiveShadow=true;card.add(page);
+ const edge=new THREE.Mesh(new THREE.BoxGeometry(2.18,.035,2.98),edgeMat);edge.position.set(side*1.12,.135,0);card.add(edge);
+}
+const spine=new THREE.Mesh(new THREE.BoxGeometry(.16,.19,3.1),mat('#8e2844'));spine.position.set(0,.21,0);spine.castShadow=true;card.add(spine);
+
+function textTexture(lines,opts={}){const c=document.createElement('canvas');c.width=768;c.height=1024;const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.textAlign='center';x.fillStyle=opts.color||'#74243c';x.font='600 76px Georgia';x.fillText(lines[0],384,180);x.fillStyle='#a65b6e';x.font='italic 38px Georgia';let y=280;for(const line of lines.slice(1)){x.fillText(line,384,y);y+=66;}const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
+const message=new THREE.Mesh(new THREE.PlaneGeometry(1.62,2.35),new THREE.MeshBasicMaterial({map:textTexture(['Muni','ты — особенная','часть этой истории','♡']),transparent:true,depthWrite:false}));message.rotation.x=-Math.PI/2;message.position.set(.95,.275,-.05);card.add(message);
+const littleNote=new THREE.Mesh(new THREE.PlaneGeometry(1.25,1.8),new THREE.MeshBasicMaterial({map:textTexture(['С теплом','для тебя','сегодня и всегда']),transparent:true,depthWrite:false}));littleNote.rotation.x=-Math.PI/2;littleNote.position.set(-1.1,.275,.15);card.add(littleNote);
+
+function makeRose(x,z,scale=1){
+ const g=new THREE.Group();g.position.set(x,.28,z);g.scale.setScalar(scale);card.add(g);
+ const stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.04,.55,8),mat('#496044'));stem.position.y=.24;stem.castShadow=true;g.add(stem);
+ for(let i=0;i<2;i++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),mat('#55724d'));leaf.scale.set(.18,.055,.34);leaf.position.set(i===0?-.14:.14,.24,i===0?.02:-.12);leaf.rotation.y=i*.9;g.add(leaf);}
+ const petalMat=[mat('#b51e42'),mat('#d33a59'),mat('#9e1737')];
+ for(let ring=0;ring<3;ring++){const count=ring===0?5:ring===1?7:9;for(let i=0;i<count;i++){const a=i/count*Math.PI*2+ring*.24;const p=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),petalMat[(i+ring)%3]);p.scale.set(.17-ring*.018,.075,.25-ring*.02);p.position.set(Math.cos(a)*(.12+ring*.045),.54+ring*.018,Math.sin(a)*(.12+ring*.045));p.rotation.y=-a;p.castShadow=true;g.add(p);}}
+ const center=new THREE.Mesh(new THREE.SphereGeometry(.105,18,14),mat('#e6a05f',.38));center.position.y=.62;g.add(center);
+ return g;
+}
+const roses=[makeRose(-1.55,-.62,.86),makeRose(1.58,.78,.8),makeRose(-1.25,1.0,.62)];
+const coverPivot=new THREE.Group();coverPivot.position.set(-2.28,.31,0);card.add(coverPivot);
+const cover=new THREE.Mesh(new THREE.BoxGeometry(4.55,.16,3.2),mat('#68182f',.42,.04));cover.position.x=2.275;cover.castShadow=true;cover.receiveShadow=true;coverPivot.add(cover);
+const coverFace=new THREE.Mesh(new THREE.PlaneGeometry(3.7,2.45),new THREE.MeshStandardMaterial({map:textTexture(['Muni','с любовью ♡'],{color:'#f7d7d0'}),transparent:true,roughness:.6,side:THREE.DoubleSide}));coverFace.rotation.x=-Math.PI/2;coverFace.position.set(2.275,.085,0);coverPivot.add(coverFace);
+const heartShape=new THREE.Shape();heartShape.moveTo(0,.22);heartShape.bezierCurveTo(-.15,.42,-.52,.36,-.52,.08);heartShape.bezierCurveTo(-.52,-.2,-.16,-.42,0,-.58);heartShape.bezierCurveTo(.16,-.42,.52,-.2,.52,.08);heartShape.bezierCurveTo(.52,.36,.15,.42,0,.22);
+const heartGeo=new THREE.ExtrudeGeometry(heartShape,{depth:.08,bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:.035,bevelThickness:.025});
+const hearts=[];for(let i=0;i<9;i++){const h=new THREE.Mesh(heartGeo,mat(i%2?'#b72a50':'#d66c83',.42));h.position.set((Math.random()-.5)*7,1.1+Math.random()*2.3,(Math.random()-.5)*4);h.scale.setScalar(.12+Math.random()*.12);h.rotation.x=-.3;scene.add(h);hearts.push({mesh:h,phase:Math.random()*6.28,speed:.3+Math.random()*.35});}
+const petals=[];for(let i=0;i<22;i++){const p=new THREE.Mesh(new THREE.SphereGeometry(1,10,8),mat(i%2?'#bd3555':'#e28b9e',.62));p.scale.set(.045,.018,.085);p.position.set((Math.random()-.5)*8,Math.random()*4,(Math.random()-.5)*5);scene.add(p);petals.push({mesh:p,phase:Math.random()*6.28,speed:.25+Math.random()*.35});}
+let opened=false,opening=0,targetOpen=0,pointerX=0,pointerY=0;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function setOpen(value){opened=value;targetOpen=value?1:0;document.querySelector('#intro').classList.toggle('hidden',value);document.querySelector('#letter').classList.toggle('visible',value);}
+document.querySelector('#open').addEventListener('click',()=>setOpen(true));
+document.querySelector('#again').addEventListener('click',()=>setOpen(false));
+addEventListener('pointermove',e=>{pointerX=(e.clientX/innerWidth-.5);pointerY=(e.clientY/innerHeight-.5);},{passive:true});
+function resize(){camera.aspect=innerWidth/innerHeight;camera.position.z=innerWidth<600?11.8:9.4;camera.position.y=innerWidth<600?6.7:5.9;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));}
+addEventListener('resize',resize);
+const clock=new THREE.Clock();
+function render(){const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;opening+=(targetOpen-opening)*(1-Math.exp(-dt*2.4));coverPivot.rotation.z=opening*1.42;
+ if(!reduced){card.rotation.y+=(pointerX*.13-card.rotation.y)*dt*1.7;card.rotation.x+=(-pointerY*.035-card.rotation.x)*dt*1.7;card.position.y=Math.sin(t*.55)*.035;roses.forEach((r,i)=>{r.rotation.y=Math.sin(t*.65+i)*.045;});hearts.forEach((o)=>{o.mesh.position.y+=Math.sin(t*o.speed+o.phase)*.0009;o.mesh.rotation.y=Math.sin(t*.5+o.phase)*.3;});petals.forEach((o)=>{o.mesh.position.y+=Math.sin(t*o.speed+o.phase)*.0008;o.mesh.position.x+=Math.sin(t*.22+o.phase)*.0005;o.mesh.rotation.y=t*.18+o.phase;});}
+ renderer.render(scene,camera);requestAnimationFrame(render);}
+requestAnimationFrame(render);document.querySelector('#loading').classList.add('done');setTimeout(()=>document.querySelector('#loading').remove(),650);
+</script>
+</body></html>
