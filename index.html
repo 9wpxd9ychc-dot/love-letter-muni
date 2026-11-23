@@ -118,7 +118,7 @@ if(!reduced){
     stage.appendChild(p);
   }
 }
-function makeShape(points){
+function makeShape(THREE,points){
   const shape=new THREE.Shape();
   shape.moveTo(points[0][0],points[0][1]);
   for(let i=1;i<points.length;i++)shape.lineTo(points[i][0],points[i][1]);
@@ -158,11 +158,11 @@ try{
   paper.position.set(0,-.55,.13);paper.castShadow=true;paper.receiveShadow=true;paper.userData.targetY=-.55;group.add(paper);letterMesh=paper;
   const foldMat=new THREE.MeshStandardMaterial({color:0x8e4b60,roughness:.72,side:THREE.DoubleSide});
   const foldLight=new THREE.MeshStandardMaterial({color:0xa96575,roughness:.68,side:THREE.DoubleSide});
-  const left=new THREE.Mesh(makeShape([[-w/2,-h/2],[-w/2,h/2],[0,0]]),foldLight);left.position.z=.16;group.add(left);
-  const right=new THREE.Mesh(makeShape([[w/2,-h/2],[w/2,h/2],[0,0]]),foldMat);right.position.z=.17;group.add(right);
-  const bottom=new THREE.Mesh(makeShape([[-w/2,-h/2],[w/2,-h/2],[0,.02]]),foldMat);bottom.position.z=.2;group.add(bottom);
+  const left=new THREE.Mesh(makeShape(THREE,[[-w/2,-h/2],[-w/2,h/2],[0,0]]),foldLight);left.position.z=.16;group.add(left);
+  const right=new THREE.Mesh(makeShape(THREE,[[w/2,-h/2],[w/2,h/2],[0,0]]),foldMat);right.position.z=.17;group.add(right);
+  const bottom=new THREE.Mesh(makeShape(THREE,[[-w/2,-h/2],[w/2,-h/2],[0,.02]]),foldMat);bottom.position.z=.2;group.add(bottom);
   const flapGroup=new THREE.Group();flapGroup.position.set(0,h/2,.24);group.add(flapGroup);
-  const flapMesh=new THREE.Mesh(makeShape([[-w/2,0],[w/2,0],[0,-h*.65]]),foldLight);
+  const flapMesh=new THREE.Mesh(makeShape(THREE,[[-w/2,0],[w/2,0],[0,-h*.65]]),foldLight);
   flapMesh.castShadow=true;flapMesh.receiveShadow=true;flapGroup.add(flapMesh);flap=flapGroup;
   const sealGeo=new THREE.CircleGeometry(.27,48);
   const sealMat=new THREE.MeshPhysicalMaterial({color:0xc18b69,roughness:.34,metalness:.12,clearcoat:.8,clearcoatRoughness:.22});
@@ -198,8 +198,13 @@ try{
     }
     rendererLocal.render(scene,camera);
   };
-  if(reduced){flapGroup.rotation.x=opened?Math.PI:0;paper.position.y=paper.userData.targetY}
-  animate();
+  if(reduced){
+    flapGroup.rotation.x=opened?Math.PI:0;
+    paper.position.y=paper.userData.targetY;
+    rendererLocal.render(scene,camera);
+  }else{
+    animate();
+  }
 }catch(error){
   console.warn('3D scene unavailable; showing accessible fallback.',error);
   sceneEl.classList.add('fallback');
