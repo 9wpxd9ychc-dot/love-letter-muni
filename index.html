@@ -173,7 +173,7 @@ sceneEl.addEventListener('pointerleave',()=>{target.x=0;target.y=0;},{passive:tr
 function resize(){const w=sceneEl.clientWidth,h=sceneEl.clientHeight;if(!w||!h)return;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);}
 resizeObserver=new ResizeObserver(resize);resizeObserver.observe(sceneEl);resize();
 function render(){
- raf=requestAnimationFrame(render);frame+=1/60;
+ if(!reduced)raf=requestAnimationFrame(render);frame+=1/60;
  if(!reduced){
   pointer.x+=(target.x-pointer.x)*.035;pointer.y+=(target.y-pointer.y)*.035;
   world.rotation.y=pointer.x+Math.sin(frame*.23)*.018;world.rotation.x=-.035+pointer.y+Math.sin(frame*.31)*.012;
@@ -184,7 +184,7 @@ function render(){
  renderer.render(scene,camera);
 }
 function chirp(opening){const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext=audioContext||new Audio();audioContext.resume();const now=audioContext.currentTime;const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.setValueAtTime(opening?520:390,now);osc.frequency.exponentialRampToValueAtTime(opening?880:260,now+.24);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.055,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.38);osc.connect(gain).connect(audioContext.destination);osc.start(now);osc.stop(now+.4);}
-function setOpened(value){opened=value;root.classList.toggle('open',opened);openButton.textContent=opened?'Закрыть письмо':'Открыть письмо';openButton.setAttribute('aria-expanded',String(opened));hint.textContent=opened?'можно перечитать в любое время':'нажми, чтобы открыть письмо';flapPivot.userData.target=opened?-Math.PI:0;insertCard.userData.targetY=opened?1.22:-.36;if(reduced){flapPivot.rotation.x=opened?-Math.PI:0;insertCard.position.y=insertCard.userData.targetY;sealGroup.scale.setScalar(opened?.05:1);}chirp(opened);}
+function setOpened(value){opened=value;root.classList.toggle('open',opened);openButton.textContent=opened?'Закрыть письмо':'Открыть письмо';openButton.setAttribute('aria-expanded',String(opened));hint.textContent=opened?'можно перечитать в любое время':'нажми, чтобы открыть письмо';flapPivot.userData.target=opened?-Math.PI:0;insertCard.userData.targetY=opened?1.22:-.36;if(reduced){flapPivot.rotation.x=opened?-Math.PI:0;insertCard.position.y=insertCard.userData.targetY;sealGroup.scale.setScalar(opened ? .05 : 1);}chirp(opened);}
 openButton.addEventListener('click',()=>setOpened(!opened));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened)setOpened(false);});
 const baseFrequencies=[261.63,329.63,392,329.63,293.66,349.23,440,349.23];
@@ -200,8 +200,7 @@ function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null;}m
 soundButton.addEventListener('click',()=>{if(soundButton.getAttribute('aria-pressed')==='true')stopMusic();else startMusic();});
 const originalSetOpened=setOpened;
 function tickEnvelope(){if(!renderer)return;const target=opened?-Math.PI:0;flapPivot.rotation.x+=(target-flapPivot.rotation.x)*(reduced?1:.075);insertCard.position.y+=(insertCard.userData.targetY-insertCard.position.y)*(reduced?1:.075);sealGroup.scale.lerp(new THREE.Vector3(opened?.05:1,opened?.05:1,opened?.05:1),reduced?1:.09);if(!reduced)requestAnimationFrame(tickEnvelope);}
-if(!reduced)tickEnvelope();else{flapPivot.rotation.x=0;render();}
-render();
+if(!reduced){tickEnvelope();render();}else{flapPivot.rotation.x=0;render();}
 window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);if(musicTimer)clearInterval(musicTimer);resizeObserver.disconnect();renderer.dispose();});
 loading.classList.add('done');
 </script>
