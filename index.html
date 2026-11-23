@@ -13,7 +13,7 @@
 :root{--ink:#24131b;--wine:#63243a;--wine2:#8d4054;--rose:#d7a0a0;--paper:#f5ecdf;--paper2:#e8d9c7;--gold:#c8a77a}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--ink);color:var(--paper);font-family:Manrope,system-ui,sans-serif}
-body{min-height:100svh;overflow:hidden}
+body{min-height:100svh;overflow-x:hidden;overflow-y:auto}
 button{font:inherit}
 .stage{position:relative;min-height:100svh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:max(25px,env(safe-area-inset-top)) 22px max(22px,env(safe-area-inset-bottom));isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#59303b 0%,#321b26 34%,#1c1017 72%,#120a0f 100%)}
 .stage:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.15;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");pointer-events:none}
@@ -49,7 +49,7 @@ h1 span{color:#d9a2a3}
 .envelope-label{position:absolute;z-index:7;bottom:20px;left:0;right:0;text-align:center;color:#f0d9cb;font:9px Manrope,sans-serif;letter-spacing:.25em;text-transform:uppercase;text-shadow:0 1px 4px #381321}
 .opened .flap{transform:rotateX(180deg) translateZ(27px)}
 .opened .seal{opacity:0;transform:translate(-50%,-50%) translateZ(34px) scale(.5)}
-.opened .letter{transform:translate3d(0,-110px,42px) rotateX(0deg);clip-path:inset(0);opacity:1;box-shadow:0 25px 55px #09050a88}
+.opened .letter{z-index:7;transform:translate3d(0,-135px,42px) rotateX(0deg);clip-path:inset(0);opacity:1;box-shadow:0 25px 55px #09050a88}
 .opened .envelope-wrap{transform:rotateX(5deg) rotateZ(0deg) translateY(10px)}
 .controls{z-index:8;text-align:center;display:flex;flex-direction:column;align-items:center;gap:13px;min-height:76px}
 .primary{border:1px solid #d8b5a17a;border-radius:999px;padding:15px 28px;background:linear-gradient(135deg,#a75d6c,#743349);color:#fff4e9;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;box-shadow:0 10px 28px #0b060a55,inset 0 1px 0 #f8d7c755;cursor:pointer;transition:transform .25s,box-shadow .25s,background .25s}
@@ -59,8 +59,8 @@ h1 span{color:#d9a2a3}
 .footer{z-index:5;font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#987c7d;opacity:.8;text-align:center}
 .petal{position:absolute;top:-12vh;left:var(--x);width:var(--s);height:calc(var(--s)*1.45);border-radius:90% 0 90% 0;background:linear-gradient(145deg,#f1c5c2,#a65b70 72%);opacity:var(--o);filter:drop-shadow(0 2px 4px #10070a55);animation:fall var(--d) linear var(--delay) infinite;pointer-events:none;z-index:1}
 @keyframes fall{0%{transform:translate3d(0,-10vh,0) rotate(0deg)}50%{transform:translate3d(var(--drift),55vh,0) rotate(190deg)}100%{transform:translate3d(calc(var(--drift)*-.5),120vh,0) rotate(390deg)}}
-@media(max-width:600px){.stage{padding-left:15px;padding-right:15px}.brand{font-size:8px;letter-spacing:.27em}.topline{margin:12px auto 10px}.kicker{font-size:8px}h1{font-size:45px}.subhead{font-size:17px}.scene{width:100%;height:min(56vh,450px);min-height:340px}.envelope-wrap{width:min(88%,360px);height:205px;bottom:43px}.letter{height:335px;padding:27px 21px 21px}.letter h2{font-size:32px;margin-bottom:13px}.letter p{font-size:16px;line-height:1.38}.opened .letter{transform:translate3d(0,-105px,42px)}.seal{width:43px;height:43px}.controls{min-height:72px}.primary{padding:14px 23px;font-size:9px}.footer{font-size:7px}}
-@media(max-height:700px) and (min-width:601px){.scene{height:390px;min-height:350px}.envelope-wrap{bottom:28px}.letter{height:330px}.opened .letter{transform:translate3d(0,-94px,42px)}}
+@media(max-width:600px){.stage{padding-left:15px;padding-right:15px}.brand{font-size:8px;letter-spacing:.27em}.topline{margin:12px auto 10px}.kicker{font-size:8px}h1{font-size:45px}.subhead{font-size:17px}.scene{width:100%;height:min(56vh,450px);min-height:340px}.envelope-wrap{width:min(88%,360px);height:205px;bottom:43px}.letter{height:335px;padding:27px 21px 21px}.letter h2{font-size:32px;margin-bottom:13px}.letter p{font-size:16px;line-height:1.38}.opened .letter{transform:translate3d(0,-138px,42px)}.seal{width:43px;height:43px}.controls{min-height:72px}.primary{padding:14px 23px;font-size:9px}.footer{font-size:7px}}
+@media(max-height:700px) and (min-width:601px){.scene{height:390px;min-height:350px}.envelope-wrap{bottom:28px}.letter{height:330px}.opened .letter{transform:translate3d(0,-108px,42px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -68,7 +68,6 @@ h1 span{color:#d9a2a3}
 <main class="stage" id="stage">
 <div class="glow"></div>
 <header class="top">
-<div class="brand">A LETTER MADE JUST FOR YOU</div>
 <div class="topline"></div>
 <div class="kicker">маленький момент только для тебя</div>
 <h1>Для Muni <span>♡</span></h1>
