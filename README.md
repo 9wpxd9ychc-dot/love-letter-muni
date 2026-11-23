@@ -1,15 +1,18 @@
 # LOVE LETTER — Muni
 
-A standalone, mobile-first romantic 3D greeting card made with Three.js.
+A mobile-first romantic greeting card with a real-time Three.js 3D envelope and an animated letter reveal.
 
 ## Features
-- Real 3D scrapbook-style card with a hinged cover animation.
-- Procedural paper roses, leaves, floating hearts and petals.
-- Personal greeting for Muni.
+
+- Interactive 3D envelope rendered with Three.js.
+- Animated opening and closing, with a CSS fallback if WebGL or the Three.js CDN is unavailable.
+- Personal Russian-language letter for Muni.
 - Responsive layout for phones, tablets and desktop.
-- Reduced-motion support and no backend or paid API.
+- Keyboard support (Escape closes the letter), visible focus, and reduced-motion support.
+- No backend, account, or paid API required.
 
 ## Run locally
+
 Serve this folder with any static HTTP server, for example:
 
 ```bash
@@ -18,4 +21,4 @@ python -m http.server 8080
 
 Then open http://localhost:8080.
 
-Three.js is loaded from jsDelivr as an ES module.
+Three.js and the display fonts are loaded from public CDNs. If Three.js cannot load, the page keeps the letter interaction available with a lightweight visual fallback.
