@@ -76,6 +76,24 @@ h1 span{color:#d69aa3;font-size:.76em}
 <div class="actions"><div class="button-row"><button class="primary" id="openLetter" type="button" aria-expanded="false" aria-controls="letter">Открыть письмо</button><button class="sound" id="soundToggle" type="button" aria-label="Включить музыку" aria-pressed="false" title="Включить музыку">♫</button></div><div class="hint" id="hint" aria-live="polite">нажми, чтобы открыть письмо</div></div>
 <footer class="footer">создано с особым вниманием · muni</footer>
 </main>
+<script>
+setTimeout(()=>{
+ const loading=document.getElementById('loading');
+ if(!loading||loading.classList.contains('done'))return;
+ loading.classList.add('done');
+ const scene=document.getElementById('scene');
+ scene.classList.add('fallback');
+ const root=document.getElementById('experience');
+ const button=document.getElementById('openLetter');
+ const hint=document.getElementById('hint');
+ button.addEventListener('click',()=>{
+  const opened=root.classList.toggle('open');
+  button.textContent=opened?'Закрыть письмо':'Открыть письмо';
+  button.setAttribute('aria-expanded',String(opened));
+  hint.textContent=opened?'можно перечитать в любое время':'нажми, чтобы открыть письмо';
+ });
+},8000);
+</script>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
 import { letterContent } from './letter-content.js';
