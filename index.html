@@ -25,7 +25,7 @@ button:focus-visible{outline:2px solid #f3d8c0;outline-offset:4px}
 .header h1 span{color:#e2b5ad}
 .header p{margin:12px 0 0;color:#d8bfba;font:italic clamp(18px,2.8vw,22px)/1.2 "Cormorant Garamond",Georgia,serif}
 .scene{position:relative;width:min(100%,560px);height:clamp(340px,53vh,510px);min-height:340px;display:grid;place-items:center;perspective:1200px;touch-action:pan-y}
-.scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+.scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}.spline-scene{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:transparent;display:block}
 .scene-fallback{position:absolute;z-index:1;width:min(82%,390px);height:220px;bottom:52px;border-radius:6px;background:linear-gradient(145deg,#9a5d6c,#713449 65%,#51243a);box-shadow:0 28px 55px #08050999,inset 0 1px 1px #f4d2c477;transform:rotate(-1deg)}
 .scene-fallback:before{content:"";position:absolute;inset:0;background:linear-gradient(32deg,transparent 49.5%,#c18b8b 50%,#88445a 50.6%) left bottom/50% 100% no-repeat,linear-gradient(-32deg,transparent 49.5%,#c18b8b 50%,#88445a 50.6%) right bottom/50% 100% no-repeat}
 .scene-fallback:after{content:"";position:absolute;left:50%;top:0;width:100%;height:58%;transform:translateX(-50%);clip-path:polygon(0 0,100% 0,50% 100%);background:linear-gradient(145deg,#b57980,#804054)}
@@ -67,6 +67,7 @@ button:focus-visible{outline:2px solid #f3d8c0;outline-offset:4px}
 </header>
 <section class="scene" id="scene" aria-label="Трёхмерный конверт с письмом">
 <div class="scene-fallback" aria-hidden="true"></div>
+<iframe class="spline-scene" src="https://my.spline.design/lovelettermuni3d-z27pFIFYk7c6smvsGnDtZ9LN/" title="Интерактивная 3D-сцена с конвертом для Muni" loading="eager" allow="autoplay; fullscreen; xr-spatial-tracking" referrerpolicy="strict-origin-when-cross-origin"></iframe>
 <article class="letter" id="letter" aria-label="Письмо для Muni">
 <div class="letter-content">
 <div class="letter-label">с любовью и теплом</div>
