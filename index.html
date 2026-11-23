@@ -93,8 +93,6 @@ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let opened=false;
 let flap=null;
 let letterMesh=null;
-let renderer=null;
-let frame=0;
 function setOpened(value){
   opened=value;
   stage.classList.toggle('opened',opened);
@@ -144,7 +142,6 @@ try{
   rendererLocal.toneMappingExposure=1.15;
   rendererLocal.domElement.setAttribute('aria-hidden','true');
   sceneEl.prepend(rendererLocal.domElement);
-  renderer=rendererLocal;
   sceneEl.classList.remove('fallback');
   scene.add(new THREE.HemisphereLight(0xffe8df,0x321522,2.0));
   const key=new THREE.DirectionalLight(0xffd9c2,3.2);key.position.set(-3,5,7);key.castShadow=true;scene.add(key);
@@ -155,7 +152,7 @@ try{
   back.castShadow=true;back.receiveShadow=true;group.add(back);
   const paperMat=new THREE.MeshStandardMaterial({color:0xf5ecdf,roughness:.9});
   const paper=new THREE.Mesh(new THREE.BoxGeometry(w*.84,3.0,.045),paperMat);
-  paper.position.set(0,-.55,.13);paper.castShadow=true;paper.receiveShadow=true;paper.userData.targetY=-.55;group.add(paper);letterMesh=paper;
+  paper.position.set(0,-.55,.13);paper.castShadow=true;paper.receiveShadow=true;paper.userData.targetY=opened?1.22:-.55;group.add(paper);letterMesh=paper;
   const foldMat=new THREE.MeshStandardMaterial({color:0x8e4b60,roughness:.72,side:THREE.DoubleSide});
   const foldLight=new THREE.MeshStandardMaterial({color:0xa96575,roughness:.68,side:THREE.DoubleSide});
   const left=new THREE.Mesh(makeShape(THREE,[[-w/2,-h/2],[-w/2,h/2],[0,0]]),foldLight);left.position.z=.16;group.add(left);
@@ -163,7 +160,7 @@ try{
   const bottom=new THREE.Mesh(makeShape(THREE,[[-w/2,-h/2],[w/2,-h/2],[0,.02]]),foldMat);bottom.position.z=.2;group.add(bottom);
   const flapGroup=new THREE.Group();flapGroup.position.set(0,h/2,.24);group.add(flapGroup);
   const flapMesh=new THREE.Mesh(makeShape(THREE,[[-w/2,0],[w/2,0],[0,-h*.65]]),foldLight);
-  flapMesh.castShadow=true;flapMesh.receiveShadow=true;flapGroup.add(flapMesh);flap=flapGroup;
+  flapMesh.castShadow=true;flapMesh.receiveShadow=true;flapGroup.add(flapMesh);flap=flapGroup;if(opened&&reduced)flapGroup.rotation.x=Math.PI;
   const sealGeo=new THREE.CircleGeometry(.27,48);
   const sealMat=new THREE.MeshPhysicalMaterial({color:0xc18b69,roughness:.34,metalness:.12,clearcoat:.8,clearcoatRoughness:.22});
   const seal=new THREE.Mesh(sealGeo,sealMat);seal.position.set(0,-.03,.34);group.add(seal);
@@ -189,7 +186,7 @@ try{
   };
   const observer=new ResizeObserver(resize);observer.observe(sceneEl);
   const animate=()=>{
-    frame=requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
     if(!reduced){
       flapGroup.rotation.x+=( (opened?Math.PI:0)-flapGroup.rotation.x)*.075;
       paper.position.y+=(paper.userData.targetY-paper.position.y)*.075;
