@@ -127,8 +127,6 @@ const sealGroup=new THREE.Group();sealGroup.position.set(0,-.06,.3);envelope.add
 const wax=new THREE.Mesh(new THREE.CylinderGeometry(.31,.34,.09,48),new THREE.MeshPhysicalMaterial({color:0xb87c64,roughness:.3,metalness:.12,clearcoat:1,clearcoatRoughness:.16}));
 wax.rotation.x=Math.PI/2;sealGroup.add(wax);
 const sealRing=new THREE.Mesh(new THREE.TorusGeometry(.27,.018,8,48),new THREE.MeshStandardMaterial({color:0xe0b58a,metalness:.58,roughness:.3}));sealRing.position.z=.06;sealGroup.add(sealRing);
-const letterM=new THREE.Mesh(new THREE.TextGeometry?new THREE.BoxGeometry(.01,.01,.01):new THREE.BoxGeometry(.01,.01,.01),new THREE.MeshBasicMaterial({color:0xffffff})); // tiny invisible anchor for the wax monogram
-letterM.visible=false;sealGroup.add(letterM);
 function createRose(x,y,scale,rotation){
  const rose=new THREE.Group();rose.position.set(x,y,.25);rose.scale.setScalar(scale);rose.rotation.z=rotation;world.add(rose);
  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.035,.055,1.7,8),new THREE.MeshStandardMaterial({color:0x30452e,roughness:.8}));stem.position.y=-.85;rose.add(stem);
@@ -163,8 +161,8 @@ function render(){
  }
  renderer.render(scene,camera);
 }
-function chirp(opening){if(!audioContext)return;const now=audioContext.currentTime;const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.setValueAtTime(opening?520:390,now);osc.frequency.exponentialRampToValueAtTime(opening?880:260,now+.24);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.055,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.38);osc.connect(gain).connect(audioContext.destination);osc.start(now);osc.stop(now+.4);}
-function setOpened(value){opened=value;root.classList.toggle('open',opened);openButton.textContent=opened?'Закрыть письмо':'Открыть письмо';openButton.setAttribute('aria-expanded',String(opened));hint.textContent=opened?'можно перечитать в любое время':'нажми, чтобы открыть письмо';flapPivot.userData.target=opened?-Math.PI:0;sealGroup.userData.target=opened?0:.0;chirp(opened);}
+function chirp(opening){const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext=audioContext||new Audio();audioContext.resume();const now=audioContext.currentTime;const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.setValueAtTime(opening?520:390,now);osc.frequency.exponentialRampToValueAtTime(opening?880:260,now+.24);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.055,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.38);osc.connect(gain).connect(audioContext.destination);osc.start(now);osc.stop(now+.4);}
+function setOpened(value){opened=value;root.classList.toggle('open',opened);openButton.textContent=opened?'Закрыть письмо':'Открыть письмо';openButton.setAttribute('aria-expanded',String(opened));hint.textContent=opened?'можно перечитать в любое время':'нажми, чтобы открыть письмо';flapPivot.userData.target=opened?-Math.PI:0;sealGroup.userData.target=opened?0:.0;if(reduced){flapPivot.rotation.x=opened?-Math.PI:0;sealGroup.scale.setScalar(opened?.05:1);}chirp(opened);}
 openButton.addEventListener('click',()=>setOpened(!opened));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened)setOpened(false);});
 const baseFrequencies=[261.63,329.63,392,329.63,293.66,349.23,440,349.23];
